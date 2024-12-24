@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepCore Mining Platform</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+        /* General Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Calibri, sans-serif; color: #fff; background: #1a1a1a; }
+        .btn { padding: 0.6rem 1.2rem; border: none; cursor: pointer; border-radius: 5px; transition: 0.3s; }
+        .btn2 { padding: 1.6rem 1.5rem; border: none; cursor: pointer; border-radius: 15px; transition: 0.3s; }
+
+        /* Welcome Page */
+        .welcome-page { display: flex; align-items: center; justify-content: center; height: 100vh; background: #222; }
+        .welcome-content { text-align: center; }
+        .heading-content {text-align: center; align-content: center;}
+        .btn-primary { background: #ffd700; color: #333; align-items: center; }
+
+        /* Dashboard */
+        .dashboard { display: grid; grid-template-columns: 250px 1fr; min-height: 100vh; }
+        .sidebar { background: #222; padding: 0.5rem; }
+        .sidebar a { color: #fff; text-decoration: none; display: block; padding: 1rem 0; }
+        .main-content { padding: 2rem; }
+        .wallet-card2 { background: #333; padding: 1.5rem; border-radius: 9px; margin-bottom: 1.9rem; }
+        .wallet-card, .pool-card { background: #333; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; }
+
+        /* Forms */
+        .form { display: flex; flex-direction: column; width: 300px; margin: 1rem auto; align-items: center; }
+        .form input { padding: 0.8rem; margin: 0.5rem 0; border-radius: 5px; border: none; justify-content: center; }
+</style>
+</head>
+<body>
+
+<!-- Welcome Page with Sign-Up and Sign-In -->
+<div class="welcome-page" id="welcomePage">
+<div class="welcome-content">
+<h1>Welcome to DeepCore Mining</h1>
+<p>Earn crypto by mining Bitcoin, Ethereum, and more.</p>
+<button class="btn btn-primary" onclick="showLoginForm()">Sign In</button>
+<button class="btn btn-primary" onclick="showSignUpForm()">Sign Up</button>
+</div>
+</div>
+
+<!-- Sign In and Sign Up Forms -->
+<div class="form-container" id="formContainer" style="display: none;">
+<form class="form" id="loginForm" onsubmit="login(event)">
+<div class="heading-content">
+<h2>Sign In</h2>
+<input type="text" placeholder="Username" required>
+<input type="password" placeholder="Password" required>
+</div>
+<button class="btn2 btn-primary" type="submit">Log In</button>
+<p>Don’t have an account? <a href="#" onclick="showSignUpForm()">Sign Up</a></p>
+</form>
+
+
+<form class="form" id="signUpForm" onsubmit="signUp(event)" style="display: none;">
+<div class="heading-content">
+<h2>Sign Up</h2>
+<input type="text" placeholder="Username" required>
+<input type="email" placeholder="Email" required>
+<input type="password" placeholder="Password" required>
+</div>
+<button class="btn2 btn-primary" type="submit">Sign Up</button>
+<p>Already have an account? <a href="#" onclick="showLoginForm()">Log In</a></p>
+</form>
+</div>
+
+<!-- Main Dashboard -->
+<div class="dashboard" id="dashboard" style="display: none;">
+<!-- Sidebar -->
+<div class="sidebar">
+<a href="#" onclick="viewHome()">Home</a>
+<a href="#" onclick="viewWallet()">Wallet</a>
+<a href="#" onclick="viewMining()">Mining Pools</a>
+<a href="#" onclick="viewWithdrawal()">Withdrawal</a>
+</div>
+
+<!-- Main Content -->
+<div class="main-content" id="mainContent">
+<!-- Placeholder for main content sections (Wallet, Mining Pools, Admin Page) -->
+</div>
+</div>
+
+<script>
+    const apiBaseUrl = 'https://api.example.com'; // Replace with your actual API base URL
+    let userBalances = { BTC: 0.002, ETH: 0.5, LTC: 0.562, BNB: 1.25 };
+
+    // Show and hide forms
+    function showLoginForm() {
+        document.getElementById('formContainer').style.display = 'flex';
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('signUpForm').style.display = 'none';
+        document.getElementById('welcomePage').style.display = 'none';
+    }
+
+    function showSignUpForm() {
+        document.getElementById('formContainer').style.display = 'flex';
+        document.getElementById('signUpForm').style.display = 'block';
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('welcomePage').style.display = 'none';
+    }
+
+    // Placeholder login function
+    function login(event) {
+        event.preventDefault();
+        document.getElementById('dashboard').style.display = 'grid';
+        document.getElementById('formContainer').style.display = 'none';
+        viewHome();
+    }
+
+    // Placeholder sign-up function
+    function signUp(event) {
+        event.preventDefault();
+        alert("Account created! Please log in.");
+        showLoginForm();
+    }
+
+    // Load different sections within the dashboard
+    function viewHome() {
+        document.getElementById('mainContent').innerHTML = `
+            <h2>Welcome to DeepCore Mining</h2>
+            <p>Your one-stop platform for cryptocurrency mining and earnings!</p>
+        `;
+    }
+
+    function viewWithdrawal() {
+        document.getElementById('mainContent').innerHTML = `
+            <div class="wallet-card2">
+                <button class="btn btn-primary" onclick="PayPal()">
+                    <h2>PayPal</h2>
+                </button>
+            </div>
+            <div class="wallet-card2">
+                <button class="btn btn-primary" onclick="FaucetPay()">
+                    <h2>FaucetPay</h2>
+                </button>
+            </div>
+            <div class="wallet-card2">
+                <button class="btn btn-primary" onclick="TrustWallet()">
+                    <h2>Trust Wallet</h2>
+                </button>
+            </div>
+        `;
+    }
+
+    // Functions for displaying withdrawal forms
+    function PayPal() {
+        document.getElementById('mainContent').innerHTML = `
+            <h2>PayPal Withdrawal</h2>
+            <form id="paypalForm">
+                <label for="paypalEmail">PayPal Email:</label>
+                <input type="email" id="paypalEmail" required>
+                <label for="paypalAmount">Amount ($):</label>
+                <input type="number" id="paypalAmount" required>
+                <button type="button" onclick="processPayPalWithdrawal()">Withdraw via PayPal</button>
+            </form>
+        `;
+    }
+
+    function FaucetPay() {
+        document.getElementById('mainContent').innerHTML = `
+            <h2>FaucetPay Withdrawal</h2>
+            <form id="faucetPayForm">
+                <label for="faucetAddress">FaucetPay Address:</label>
+                <input type="text" id="faucetAddress" required>
+                <label for="faucetAmount">Amount:</label>
+                <input type="number" id="faucetAmount" required>
+                <label for="faucetCurrency">Currency:</label>
+                <select id="faucetCurrency">
+                    <option value="BTC">Bitcoin (BTC)</option>
+                    <option value="ETH">Ethereum (ETH)</option>
+                    <option value="LTC">Litecoin (LTC)</option>
+                    <option value="BNB">Binance Beacon (BNB)</option>
+                </select>
+                <button type="button" onclick="processFaucetPayWithdrawal()">Withdraw via FaucetPay</button>
+            </form>
+        `;
+    }
+
+    function TrustWallet() {
+        document.getElementById('mainContent').innerHTML = `
+            <h2>Trust Wallet Withdrawal</h2>
+            <form id="trustWalletForm">
+                <label for="trustWalletAddress">Trust Wallet Address:</label>
+                <input type="text" id="trustWalletAddress" required>
+                <label for="trustWalletAmount">Amount:</label>
+                <input type="number" id="trustWalletAmount" required>
+                <label for="trustWalletCurrency">Currency:</label>
+                <select id="trustWalletCurrency">
+                    <option value="BTC">Bitcoin (BTC)</option>
+                    <option value="ETH">Ethereum (ETH)</option>
+                    <option value="LTC">Litecoin (LTC)</option>
+                    <option value="BNB">Binance Beacon (BNB)</option>
+                </select>
+                <button type="button" onclick="processTrustWalletWithdrawal()">Withdraw via Trust Wallet</button>
+            </form>
+        `;
+    }
+
+    // Simulate withdrawal processing
+    function processPayPalWithdrawal() {
+        const email = document.getElementById('paypalEmail').value;
+        const amount = document.getElementById('paypalAmount').value;
+
+        if (email && amount) {
+            alert(`Withdrawal of $${amount} to PayPal email ${email} is being processed.`);
+        } else {
+            alert('Please fill in all the required fields.');
+        }
+    }
+
+    function processFaucetPayWithdrawal() {
+        const address = document.getElementById('faucetAddress').value;
+        const amount = document.getElementById('faucetAmount').value;
+        const currency = document.getElementById('faucetCurrency').value;
+
+        if (address && amount && currency) {
+            alert(`Withdrawal of ${amount} ${currency} to FaucetPay address ${address} is being processed.`);
+        } else {
+            alert('Please fill in all the required fields.');
+        }
+    }
+
+    function processTrustWalletWithdrawal() {
+        const address = document.getElementById('trustWalletAddress').value;
+        const amount = document.getElementById('trustWalletAmount').value;
+        const currency = document.getElementById('trustWalletCurrency').value;
+
+        if (address && amount && currency) {
+            alert(`Withdrawal of ${amount} ${currency} to Trust Wallet address ${address} is being processed.`);
+        } else {
+            alert('Please fill in all the required fields.');
+        }
+    }
+
+    // Load wallet section
+    function viewWallet() {
+        document.getElementById('mainContent').innerHTML = `
+            <div class="wallet-card">
+                <h2>Bitcoin Balance</h2>
+                <p>Balance: ${userBalances.BTC} BTC</p>
+                <button class="btn btn-primary" onclick="initiateWithdrawal('BTC', userBalances.BTC)">Withdraw</button>
+            </div>
+            <div class="wallet-card">
+                <h2>Ethereum Balance</h2>
+                <p>Balance: ${userBalances.ETH} ETH</p>
+                <button class="btn btn-primary" onclick="initiateWithdrawal('ETH', userBalances.ETH)">Withdraw</button>
+            </div>
+            <div class="wallet-card">
+                <h2>Litecoin Balance</h2>
+                <p>Balance: ${userBalances.LTC} LTC</p>
+                <button class="btn btn-primary" onclick="initiateWithdrawal('LTC', userBalances.LTC)">Withdraw</button>
+            </div>
+            <div class="wallet-card">
+                <h2>BNB Balance</h2>
+                <p>Balance: ${userBalances.BNB} BNB</p>
+                <button class="btn btn-primary" onclick="initiateWithdrawal('BNB', userBalances.BNB)">Withdraw</button>
+            </div>
+        `;
+    }
+
+    // Load mining section
+    function viewMining() {
+        document.getElementById('mainContent').innerHTML = `
+            <div class="pool-card">
+                <h3>Bitcoin Pool</h3>
+                <p>Hash Rate: <span id="btcHashRate">50 TH/s</span></p>
+                <p>Earned: <span id="btcEarnings">0</span> BTC</p>
+                <button class="btn btn-primary" onclick="startMining('btc', 50)">Start Mining Bitcoin</button>
+                <button class="btn btn-primary" onclick="stopMining('btc')">Stop Mining Bitcoin</button>
+                <button class="btn btn-primary" onclick="withdrawFromPool('btc')">Withdraw to Wallet</button>
+            </div>
+            <div class="pool-card">
+                <h3>Ethereum Pool</h3>
+                <p>Hash Rate: <span id="ethHashRate">175 GH/s</span></p>
+                <p>Earned: <span id="ethEarnings">0</span> ETH</p>
+                <button class="btn btn-primary" onclick="startMining('eth', 175)">Start Mining Ethereum</button>
+                <button class="btn btn-primary" onclick="stopMining('eth')">Stop Mining Ethereum</button>
+                <button class="btn btn-primary" onclick="withdrawFromPool('eth')">Withdraw to Wallet</button>
+            </div>
+            <div class="pool-card">
+                <h3>Litecoin Pool</h3>
+                <p>Hash Rate: <span id="ltcHashRate">75 GH/s</span></p>
+                <p>Earned: <span id="ltcEarnings">0</span> LTC</p>
+                <button class="btn btn-primary" onclick="startMining('ltc', 75)">Start Mining Litecoin</button>
+                <button class="btn btn-primary" onclick="stopMining('ltc')">Stop Mining Litecoin</button>
+                <button class="btn btn-primary" onclick="withdrawFromPool('ltc')">Withdraw to Wallet</button>
+                <div class="pool-card">
+                <h3>BNB Pool</h3>
+                <p>Hash Rate: <span id="ltcHashRate">95 GH/s</span></p>
+                <p>Earned: <span id="bnbEarnings">0</span> BNB</p>
+                <button class="btn btn-primary" onclick="startMining('bnb', 95)">Start Mining BNB</button>
+                <button class="btn btn-primary" onclick="stopMining('bnb')">Stop Mining BNB</button>
+                <button class="btn btn-primary" onclick="withdrawFromPool('bnb')">Withdraw to Wallet</button>
+            </div>
+        `;
+    }
+
+    // Simulate mining by increasing earnings based on hash rate
+    let miningIntervals = {};
+
+    function startMining(coin, hashRate) {
+        // Prevent multiple mining sessions
+        if (miningIntervals[coin]) {
+            alert(`${coin.toUpperCase()} mining is already in progress!`);
+            return;
+        }
+
+        const earningsId = `${coin}Earnings`;
+        let earnings = 0;
+
+        // Convert hash rate to earnings per second (arbitrary scaling for simulation)
+        const earningsPerSecond = hashRate * 0.000001374;
+
+        miningIntervals[coin] = setInterval(() => {
+            earnings += earningsPerSecond;
+            document.getElementById(earningsId).textContent = earnings.toFixed(10); // Display 9 decimal places
+        }, 100); // Update every second
+    }
+
+    function stopMining(coin) {
+        if (miningIntervals[coin]) {
+            clearInterval(miningIntervals[coin]);
+            delete miningIntervals[coin];
+            alert(`${coin.toUpperCase()} mining stopped.`);
+        } else {
+            alert(`${coin.toUpperCase()} mining is not in progress.`);
+        }
+    }
+
+    function withdrawFromPool(coin) {
+        const earningsId = `${coin}Earnings`;
+        const earnings = parseFloat(document.getElementById(earningsId).textContent);
+
+        if (earnings > 0) {
+            // Simulate API call to withdraw earnings to wallet
+            userBalances[coin.toUpperCase()] += earnings;
+            document.getElementById(earningsId).textContent = '0';
+            alert(`Withdrew ${earnings.toFixed(9)} ${coin.toUpperCase()} to your wallet.`);
+            viewWallet();
+        } else {
+            alert(`No ${coin.toUpperCase()} earnings to withdraw.`);
+        }
+    }
+
+    function initiateWithdrawal(currency, amount) {
+        alert(`Initiating withdrawal of ${amount} ${currency} to your wallet.`);
+        // Placeholder for actual withdrawal process
+    }
+</script>
+
+</body>
