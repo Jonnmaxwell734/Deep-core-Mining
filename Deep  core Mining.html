@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scaile=1.0">
 <title>DeepCore Mining Platform</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -10,7 +10,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Calibri, sans-serif; color: #fff; background: #1a1a1a; }
         .btn { padding: 0.6rem 1.2rem; border: none; cursor: pointer; border-radius: 5px; transition: 0.3s; }
-        .btn2 { padding: 1.6rem 1.5rem; border: none; cursor: pointer; border-radius: 15px; transition: 0.3s; }
+        .btn2 { padding: 1.6rem 1.5rem; border: none; cursor: pointer; border-radius: 15px; transition: 0.3s; width: 300px; align-items: center; }
 
         /* Welcome Page */
         .welcome-page { display: flex; align-items: center; justify-content: center; height: 100vh; background: #222; }
@@ -19,8 +19,8 @@
         .btn-primary { background: #ffd700; color: #333; align-items: center; }
 
         /* Dashboard */
-        .dashboard { display: grid; grid-template-columns: 250px 1fr; min-height: 100vh; }
-        .sidebar { background: #222; padding: 0.5rem; }
+        .dashboard { display: grid; grid-template-columns: 100px 1fr; min-height: 100vh; }
+        .sidebar { background: #222; padding: 0.5rem; position: relative; }
         .sidebar a { color: #fff; text-decoration: none; display: block; padding: 1rem 0; }
         .main-content { padding: 2rem; }
         .wallet-card2 { background: #333; padding: 1.5rem; border-radius: 9px; margin-bottom: 1.9rem; }
@@ -29,6 +29,28 @@
         /* Forms */
         .form { display: flex; flex-direction: column; width: 300px; margin: 1rem auto; align-items: center; }
         .form input { padding: 0.8rem; margin: 0.5rem 0; border-radius: 5px; border: none; justify-content: center; }
+
+        /* Collapse Button Styles */
+        .collapse-btn {
+            background: #222;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.5rem 1rem;
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+        }
+
+        /* Collapsed Sidebar Styles */
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar.collapsed a {
+            display: none;
+        }
 </style>
 </head>
 <body>
@@ -72,10 +94,11 @@
 <div class="dashboard" id="dashboard" style="display: none;">
 <!-- Sidebar -->
 <div class="sidebar">
-<a href="#" onclick="viewHome()">Home</a>
-<a href="#" onclick="viewWallet()">Wallet</a>
-<a href="#" onclick="viewMining()">Mining Pools</a>
-<a href="#" onclick="viewWithdrawal()">Withdrawal</a>
+    <button id="collapseButton" class="collapse-btn" onclick="toggleSidebar()">☰</button>
+    <a href="#" onclick="viewHome()">Home</a>
+    <a href="#" onclick="viewWallet()">Wallet</a>
+    <a href="#" onclick="viewMining()">Mining Pools</a>
+    <a href="#" onclick="viewWithdrawal()">Withdrawal</a>
 </div>
 
 <!-- Main Content -->
@@ -121,8 +144,10 @@
     // Load different sections within the dashboard
     function viewHome() {
         document.getElementById('mainContent').innerHTML = `
+            <div class="welcome-content">
             <h2>Welcome to DeepCore Mining</h2>
             <p>Your one-stop platform for cryptocurrency mining and earnings!</p>
+            </div>
         `;
     }
 
@@ -266,22 +291,22 @@ function viewWallet() {
             <div class="wallet-card">
                 <h2>Bitcoin Balance</h2>
                 <p>Balance: ${userBalances.BTC} BTC</p>
-                <button class="btn btn-primary" onclick="initiateWithdrawal('BTC', userBalances.BTC)">Withdraw</button>
+                <button class="btn btn-primary" onclick="viewWithdrawal()">Withdraw</button>
             </div>
             <div class="wallet-card">
                 <h2>Ethereum Balance</h2>
                 <p>Balance: ${userBalances.ETH} ETH</p>
-                <button class="btn btn-primary" onclick="initiateWithdrawal('ETH', userBalances.ETH)">Withdraw</button>
+                <button class="btn btn-primary" onclick="viewWithdrawal()">Withdraw</button>
             </div>
             <div class="wallet-card">
                 <h2>Litecoin Balance</h2>
                 <p>Balance: ${userBalances.LTC} LTC</p>
-                <button class="btn btn-primary" onclick="initiateWithdrawal('LTC', userBalances.LTC)">Withdraw</button>
+                <button class="btn btn-primary" onclick="viewWithdrawal()">Withdraw</button>
             </div>
             <div class="wallet-card">
                 <h2>BNB Balance</h2>
                 <p>Balance: ${userBalances.BNB} BNB</p>
-                <button class="btn btn-primary" onclick="initiateWithdrawal('BNB', userBalances.BNB)">Withdraw</button>
+                <button class="btn btn-primary" onclick="viewWithdrawal()">Withdraw</button>
             </div>
         `;
     }
@@ -374,6 +399,12 @@ function viewWallet() {
     function initiateWithdrawal(currency, amount) {
         alert(`Initiating withdrawal of ${amount} ${currency} to your wallet.`);
         // Placeholder for actual withdrawal process
+    }
+
+    // Toggle sidebar collapse
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('collapsed');
     }
 </script>
 
